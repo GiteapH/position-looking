@@ -1,0 +1,91 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* 设置浮动 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:aqua;
+    opacity: 0.6;
+}
+
+.trans {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    /* 设置浮动 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #6ebfe7;
+}
+
+.trans span {
+    position: absolute;
+    color: #fff;
+    z-index: 1;
+}
+
+.trans::after {
+    content: "";
+    position: absolute;
+    width: 115px;
+    height: 115px;
+    background: #422ba7;
+    /* 添加边框 */
+    border: 4px solid #3ff9dc;
+    /* 初始化位置 */
+    transform: rotate(45deg);
+    /* 添加动画、动画时间和样式 */
+    animation: rotate1 3s ease-in-out infinite alternate;
+}
+
+.trans::before {
+    content: "";
+    position: absolute;
+    width: 115px;
+    height: 115px;
+    /* 添加边框 */
+    border: 4px solid #ffab91;
+    /* 初始化位置 */
+    transform: rotate(-90deg);
+    /* 添加动画、动画时间和样式 */
+    animation: rotate2 3s ease-in-out infinite alternate;
+}
+
+@keyframes rotate1 {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-90deg);
+    }
+    50% {
+        transform: rotate(-180deg);
+    }
+    75% {
+        transform: rotate(-270deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes rotate2 {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(90deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    75% {
+        transform: rotate(270deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

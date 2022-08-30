@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据可视化</title>
+  <link rel="stylesheet" href="./css/positioncount.css" />
+  <!-- 先引入jquery -->
+  <script src="./JS/jquery.js"></script>
+  <link rel="stylesheet" href="./css/tdesign.css" />
+  <link rel="stylesheet" href="./css/menu.css">
+  <link rel="stylesheet" href="./css/loading.css">
+  <script src="./JS/vue.js"></script>
+  <script src="./JS/tdesign.js"></script>
+  <script>
+    jQuery.support.cors = true
+  </script>
+  <style>
+    .t-button {
+      border: #3280da solid 1px;
+    }
+    .element.style{
+
+    }
+    .t-form__label {
+      color:#3280da;
+    }
+    .t-input__inner{
+      color:#3280da;
+    }
+    .t-input.t-is-error {
+      border: 1px solid #3280da;
+      background-color: rgba(255, 255, 255, 0);
+    }
+
+    .t-button--variant-outline.t-button--ghost {
+      background-color: transparent;
+      color: #3280da;
+			border: #3280da 1px solid; 
+    }
+
+    .head .col {
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 0.2rem;
+    }
+
+    .col {
+      width: 1.1rem;
+      height: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: default;
+    }
+
+    .update {
+      position: absolute;
+      color: rgb(198, 255, 250);
+      font-size: 15px;
+    }
+
+    .update p {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<script>
+  var tempAddress = "全国"
+  var preCode = [
+    ['100000', '全国']
+  ]
+  $(window).resize(function () {
+    //执行代码块
+    let ww = $(window).width();
+    if (ww < 1111)
+      $("#h1").hide()
+    else
+      $("#h1").show()
+
+    if (ww < 729)
+      $(".showTime").hide()
+    else
+      $(".showTime").show()
+  });
+</script>
+
+<body>
+  <!-- 头部的盒子 -->
+  <header>
+    <div id="select" style="float: left; margin-top: 10px;">
+      <t-form>
+        <t-form-item label="起始需求量" style="float: left;">
+          <t-input-number v-model="start" status="error" theme="column" :tips="tip">
+          </t-input-number>
+        </t-form-item>
+        <t-form-item label="结束需求量" style="float: left;">
+          <t-input-number v-model="end" status="error" theme="column" :tips="tipR"></t-input-number>
+        </t-form-item>
+        <t-form-item style="float: left;">
+          <t-button variant="outline" ghost @click="search">查询</t-button>
+        </t-form-item>
+      </t-form>
+    </div>
+    <h1 id="h1" style="margin-top: 0px;margin-right: 25%;">基于招聘数量的数据分析展示</h1>
+    <div class="showTime"></div>
+    <script>
+      var t = null;
+      t = setTimeout(time, 1000); //開始运行
+      function time() {
+        clearTimeout(t); //清除定时器
+        dt = new Date();
+        var y = dt.getFullYear();
+        var mt = dt.getMonth() + 1;
+        var day = dt.getDate();
+        var h = dt.getHours(); //获取时
+        var m = dt.getMinutes(); //获取分
+        var s = dt.getSeconds(); //获取秒
+        document.querySelector(".showTime").innerHTML =
+          "当前时间：" +
+          y +
+          "年" +
+          mt +
+          "月" +
+          day +
+          "-" +
+          h +
+          "时" +
+          m +
+          "分" +
+          s +
+          "秒";
+        t = setTimeout(time, 1000); //设定定时器，循环运行
+      }
+    </script>
+  </header>
+  <div id="nmh-navicon" class="NMH-g-plugin NMH-g-navicon Jnmh-open" style="z-index: 999;">
+    <button class="Jnmh-btnlogo"></button>
+    <ins class="Jnmh-btnlogohover"></ins>
+    <ul class="Jnmh-m-submenu">
+      <li class="Jnmh-subli">
+        <dl class="Jnmh-subdl">
+          <dt class="NMH-subdt"><a href="./index.html" style="text-decoration: none; color: #ededed;">首页</a></dt>
+          <dd class="NMH-subdd"></dd>
+        </dl>
+      </li>
+      <li class="Jnmh-subli">
+        <dl class="Jnmh-subdl">
+          <dt class="NMH-subdt"><a href="./positionInfo.html" style="text-decoration: none; color: #ededed;">岗位信息</a>
+          </dt>
+          <dd class="NMH-subdd"></dd>
+        </dl>
+      </li>
+      <li class="Jnmh-subli">
+        <dl class="Jnmh-subdl">
+          <dt class="NMH-subdt"><a href="./positioncount.html" style="text-decoration: none; color: #3280da;">招聘数量</a>
+          </dt>
+          <dd class="NMH-subdd"></dd>
+        </dl>
+      </li>
+      <li class="Jnmh-subli">
+        <dl class="Jnmh-subdl">
+          <dt class="NMH-subdt"><a href="./positionsalary.html" style="text-decoration: none; color: #ededed;">薪资</a>
+          </dt>
+          <dd class="NMH-subdd"></dd>
+        </dl>
+      </li>
+      <li class="Jnmh-subli">
+        <dl class="Jnmh-subdl">
+          <dt class="NMH-subdt"><a
+              href="https://datav.dameng.com/dataview/publish/page.html?pageId=1550317068090343425&isTemplate=0"
+              style="text-decoration: none; color: #ededed;">实时展示</a></dt>
+          <dd class="NMH-subdd"></dd>
+        </dl>
+      </li>
+      <li class="Jnmh-subli">
+        <dl class="Jnmh-subdl">
+            <dt class="NMH-subdt"><a
+                    href="./yuce.html"
+                    style="text-decoration: none; color:  #ededed;">智能分析</a></dt>
+            <dd class="NMH-subdd"></dd>
+        </dl>
+    </li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    var GtoggleNavlogo = function () {
+      var li = $('#nmh-navicon').find('.Jnmh-subli');
+      var lilen = li.length;
+      var avgDeg = 180 / (lilen - 1);// 平均角度
+      var initDeg = 0;// 起始方向角度
+      if ($('#nmh-navicon').hasClass('Jnmh-onleft')) {
+        // 如果悬浮球被拖拽到左边，则二级菜单则显示右侧
+        li.css({ transform: 'rotate(0deg)' });
+        initDeg = 180;
+      } else {
+        // 默认悬浮球在右边，二级菜单显示在左侧
+        li.css({ transform: 'rotate(-360deg)' });
+      }
+      for (var i = 0, j = lilen - 1; i < lilen; i++, j--) {
+        var d = initDeg - (i * avgDeg);
+        var z = initDeg ? j : i;
+        // 
+        $('#nmh-navicon').hasClass('Jnmh-open') ? GrotateNavlogo(li[z], d) : GrotateNavlogo(li[z], 0);
+      }
+    };
+    var GrotateNavlogo = function (dom, deg) {
+      $({ a: 0 }).animate({ a: deg }, {
+        step: function (now, fx) {
+          $(dom).css({ transform: 'rotate(' + now + 'deg)' });
+          $(dom).children().css({ transform: 'rotate(' + (-now) + 'deg)' });
+        }, duration: 0
+      });
+    }
+    GtoggleNavlogo()
+    // 鼠标拖动logo移动
+    $(document).on('mousedown', '.Jnmh-btnlogo', function (e_down) {
+      var wrap = $('#nmh-navicon');
+      wrap.removeClass('Jnmh-open');
+      $('.Jnmh-m-submenu').hide();
+      GtoggleNavlogo();
+
+      var positionDiv = wrap.offset();
+      var distenceX = e_down.pageX - positionDiv.left;
+      var distenceY = e_down.pageY - positionDiv.top + $(document).scrollTop();
+      $(document).mousemove(diy_move);
+      function diy_move(e_move) {
+        var x = e_move.pageX - distenceX;
+        var y = e_move.pageY - distenceY;
+
+        if (x < 0) {
+          x = 0;
+        } else if (x > $(document).width() - wrap.outerWidth(true)) {
+          x = $(document).width() - wrap.outerWidth(true);
+        }
+
+        if (y < 0) {
+          y = 0;
+        } else if (y > $(window).height() - wrap.outerHeight(true)) {
+          y = $(window).height() - wrap.outerHeight(true);
+        }
+
+        $(wrap).css({
+          'left': x + 'px',
+          'top': y + 'px'
+        });
+      }
+      $(document).mouseup(function () {
+        var x = $(wrap).offset().left;
+        var rm = '', ad = 'Jnmh-open';
+        if (x > $(document).width() / 2) {
+          x = $(document).width() - wrap.outerWidth(true) - 10;
+          rm = 'Jnmh-onleft';
+        } else {
+          x = 10;
+          ad += ' Jnmh-onleft';
+        }
+        $(wrap).css({ left: x + 'px' }).addClass(ad).removeClass(rm);
+        $('.Jnmh-m-submenu').show();
+        GtoggleNavlogo();
+        $(document).unbind('mousemove', diy_move);
+      });
+
+    });
+
+  </script>
+
+  <!-- 页面主体部分 -->
+  <section class="mainbox">
+    <div class="column">
+      <div class="panel bar2">
+        <h2>各岗位招聘数量</h2>
+        <div class="chart">图表</div>
+        <div class="panel-footer"></div>
+      </div>
+      <div class="panel line">
+        <h2>国内招聘人数最多的五个岗位</h2>
+        <div class="chart" id="date">图表</div>
+        <div class="panel-footer"></div>
+      </div>
+      <div class="panel bar" style="height: 3.125rem;">
+        <h2>专业技术术语</h2>
+        <div class="chart" id="key" style="height: 2.5rem ;"></div>
+        <div class="panel-footer"></div>
+      </div>
+    </div>
+    <div class="column">
+      <!-- 地图模块 -->
+      <div class="map panel" style="height: 6.95rem;">
+        <div class="update">
+          <p>上次更新时间:&nbsp&nbsp{{updateTime}}</p>
+          <p>上次更新条数:&nbsp&nbsp{{updateLen}}条</p>
+          <p>更新状态:&nbsp&nbsp{{countdown}}</p>
+        </div>
+        <div class="map1"></div>
+        <div class="map2"></div>
+        <div class="chart" style="height: 6rem; margin-top: 0.3rem;"></div>
+        <div class="container">
+          <div class="trans">
+            <span id="loadAdd"></span>
+          </div>
+        </div>
+        <div class="panel-footer"></div>
+      </div>
+      <div id="showList">
+        <div class="panel monitor " :style="styleTable">
+          <div class="inner">
+            <div class="content" style="display: block;">
+              <div class="head">
+                <span class="col">地点</span>
+                <span class="col">公司名称</span>
+                <span class="col">岗位名称</span>
+                <span class="col">人数需求量</span>
+                <span class="col" style="overflow:visible">薪资(千/月)</span>
+                <span class="col">学历要求</span>
+                <span class="col">经验要求</span>
+              </div>
+              <div class="marquee-view">
+                <div class="marquee" id="tableList" :style="style">
+                  <div class="row" v-for="data in tableData">
+                    <span class="col" :title="data.one">{{data.one}}</span>
+                    <span class="col" :title="data.two">{{data.two}}</span>
+                    <span class="col" :title="data.three">{{data.three}}</span>
+                    <span class="col" :title="data.four">{{data.four}}</span>
+                    <span class="col" :title="data.five">{{data.five}}</span>
+                    <span class="col" :title="data.six">{{data.six}}</span>
+                    <span class="col" :title="data.seven">{{data.seven}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <script src="./JS/flexible.js"></script>
+  <!-- 必须先引入china.js 这个文件 因为中国地图需要 -->
+  <script src="./JS/echarts.min.js"></script>
+  <script src="./JS/e-wordclouds.min.js"></script>
+  <script src="./JS/requestAPI.js"></script>
+  <script src="./JS/usefulInfo.js"></script>
+  <script src="./JS/subassembly.js"></script>
+  <script src="./JS/china.js"></script>
+  <script>
+    let countdownSecond = -1
+    let point = 1
+    let update = new Vue({
+      el: ".update",
+      data: {
+        updateTime: "  ",
+        updateLen: "  ",
+        countdown: "  "
+      },
+      mounted() {
+        $.ajax({
+          url: 'http://' + ip + "/updateLen",
+          type: "GET",
+          success(res) {
+            update.updateLen = res
+            
+          }
+        })
+        $.ajax({
+          url: 'http://' + ip + "/updateDate",
+          type: "GET",
+          success(res) {
+            update.updateTime = res
+            
+          }
+        })
+        $.ajax({
+          url: 'http://' + ip + "/countdown",
+          type: "GET",
+          success(res) {
+            res = parseInt(res)
+            countdownSecond = res
+            if (countdownSecond == 0) {
+              update.countdown = "正在拓展数据源."
+              setInterval(() => {
+                $.ajax({
+                  url: 'http://' + ip + "/countdown",
+                  type: "GET",
+                  success(innerRes) {
+                    if (innerRes != 0) {
+                      location.reload()
+                    } else {
+                      if (point == 7) point = 0
+                      update.countdown = "正在拓展数据源" + '.'.repeat(++point % 7)
+                    }
+                  }
+                })
+              }, 1000)
+            } else {
+              setInterval(() => {
+                hh = parseInt(countdownSecond / 60 / 60 % 60);
+                mm = parseInt(countdownSecond / 60 % 60);
+                ss = parseInt(countdownSecond % 60);
+                update.countdown = '还剩 ' + hh + "时" + mm + '分' + ss + "秒 更新"
+                countdownSecond--
+
+              }, 1000)
+            }
+          }
+        })
+      }
+    })
+    let select = new Vue({
+      el: "#select",
+      data() {
+        return {
+          start: 0,
+          end: 0,
+          tipL: "",
+          tipR: "",
+        };
+      },
+      methods: {
+        search() {
+          if (this.start > this.end) {
+            this.tipR = ""
+            this.tipL = "注意:起始>结束"
+            return
+          }
+          if (this.start == null) {
+            this.tipR = ""
+            this.tipL = "注意:输入不能为空"
+            return
+          }
+          if (this.end == null) {
+            this.tipL = ""
+            this.tipR = "注意:输入不能为空"
+            return
+          }
+          if (this.end < 0) {
+            this.tipL = ""
+            this.tipR = "注意:输入需要大于0"
+            return
+          }
+          if (this.start < 0) {
+            this.tipR = ""
+            this.tipL = "注意:输入需要大于0"
+            return
+          }
+          this.tipR = ""
+          this.tipL = ""
+          loadMap(preCode[preCode.length - 1][0], preCode[preCode.length - 1][1], echarts.init(document.querySelector(".map .chart")))
+          reloadPosicount(tempAddress, this.start, this.end, echarts.init(document.querySelector(".map .chart")))
+        },
+      },
+    })
+    var list = new Vue({
+      el: "#showList",
+      data: {
+        tableData: [],
+        styleTable: "",
+        style: "",
+      }
+    })
+  </script>
+  <script src="./JS/yMap.js"></script>
+</body>
+
+</html>

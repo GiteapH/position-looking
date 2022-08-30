@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>数据可视化</title>
+	<link rel="stylesheet" href="./css/tdesign.css">
+	<link rel="stylesheet" href="./css/index.css" />
+	<link rel="stylesheet" href="./css/menu.css">
+	<link rel="stylesheet" href="./css/loading.css">
+	<script src="./JS/jquery.js"></script>
+	<!-- 请求API -->
+	<script src="./JS/requestAPI.js"></script>
+	<script src="./JS/usefulInfo.js"></script>
+	<script src="./JS/vue.js"></script>
+	<script src="./JS/tdesign.js"></script>
+	<script src="./JS/pizzip.js"></script>
+	<script src="./JS/pizzip-utils.js"></script>
+	<script src="./JS/docxtemplete.js"></script>
+	<script src="./JS/fileSaver.js"></script>
+	<script src="./JS/toWord.js"></script>
+	<script src="./JS/imagemodule.js"></script>
+	<script src="./JS/downSubassembly.js"></script>
+	<script>
+		jQuery.support.cors = true
+	</script>
+	<style>
+		.t-demo-cascader {
+			width: 150px;
+			background-color: rgba(0, 0, 0, 0);
+			margin-left: 10px;
+			float: left;
+			color: #3280da;
+			border: #3280da 1px solid;
+		}
+
+		.t-cascader__placeholder {
+			color: #3280da;
+		}
+		.t-cascader__content{
+			color:#3280da;
+		}
+		#nameInput {
+			width: 150px;
+			float: left;
+			margin-left: 10px;
+		}
+
+		.t-input {
+			background-color: rgba(0, 0, 0, 0);
+			border: 1px solid #3280da;
+		}
+
+		.t-input__inner::-webkit-input-placeholder {
+			color: #3280da;
+		}
+
+		.t-input__inner {
+			color: #3280da
+		}
+
+		#module {
+			opacity: 0;
+		}
+
+		button {
+			position: absolute;
+			right: 5.6rem;
+			top: 0.26rem;
+			line-height: 0.3375rem;
+			color: #3280da;
+			border: #3280da 1px solid;
+			padding: 1px 6px 1px;
+			font-size: 0.1rem;
+			background-color: rgba(0, 0, 0, 0);
+			cursor: pointer;
+			;
+		}
+
+		.rader .t-input {
+			height: 24px;
+		}
+
+		.update {
+			position: absolute;
+			color: rgb(198, 255, 250);
+			font-size: 15px;
+		}
+
+		.update p {
+			margin-top: 15px;
+		}
+
+		.input {
+			width: auto;
+			display: flex;
+			flex-wrap: wrap;
+			align-content: flex-start;
+			flex: 1 0 auto;
+		}
+
+		.t-form__label {
+			color: #ededed;
+		}
+
+		.tdesign-demo__select-input-ul-single {
+			padding: 4px 0;
+			height: 300px;
+			overflow-y: scroll;
+		}
+
+		.tdesign-demo__select-input-ul-single::-webkit-scrollbar-thumb {
+			/*滚动条里面小方块*/
+			border-radius: 10px;
+			background-color: skyblue;
+			background-image: -webkit-linear-gradient(45deg,
+					rgba(255, 255, 255, 0.2) 25%,
+					transparent 25%,
+					transparent 50%,
+					rgba(255, 255, 255, 0.2) 50%,
+					rgba(255, 255, 255, 0.2) 75%,
+					transparent 75%,
+					transparent);
+		}
+
+		.tdesign-demo__select-input-ul-single::-webkit-scrollbar-track {
+			/*滚动条里面轨道*/
+			box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+			background: #ededed;
+			border-radius: 10px;
+		}
+
+		.tdesign-demo__select-input-ul-single>li {
+			display: block;
+			border-radius: 3px;
+			height: 40px;
+			line-height: 22px;
+			cursor: pointer;
+			padding: 9px 8px;
+			color: var(--td-text-color-primary);
+			transition: background-color 0.2s cubic-bezier(0.38, 0, 0.24, 1);
+			white-space: nowrap;
+			word-wrap: normal;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.tdesign-demo__select-input-ul-single>li:hover {
+			background-color: var(--td-bg-color-container-hover);
+		}
+
+		.head .col {
+			color: rgba(255, 255, 255, 0.8);
+			margin-top: 10px;
+		}
+
+		.col {
+			width: 1.1rem;
+			height: 30px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			cursor: default;
+		}
+	</style>
+</head>
+<script>
+	var tempAddress = "全国"
+	var preCode = [
+		['100000', '全国']
+	]
+
+	$(window).resize(function () {
+		//执行代码块
+		let ww = $(window).width();
+		if (ww < 1112)
+			$("#h1").hide()
+		else
+			$("#h1").show()
+
+		if (ww < 729)
+			$(".showTime").hide()
+		else
+			$(".showTime").show()
+	});
+</script>
+
+<body>
+	<div id='l0' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l1' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l2' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l3' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l4' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l5' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l6' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l7' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l8' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l9' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l10' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l11' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l12' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l13' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l14' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l15' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l16' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l17' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l18' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id='l19' style="display: none;height: 6rem;width:  7rem;"></div>
+	<div id="downLoading">
+		<t-loading :loading="loading" :text="percent" fullscreen />
+	</div>
+	<script>
+		let loading = new Vue({
+			el: '#downLoading',
+			data: {
+				loading: false,
+				percent: '0%'
+			}
+		})
+	</script>
+	<!-- 头部的盒子 -->
+	<header>
+		<div class="select" style="height: 80px;margin-bottom: 100px;">
+			<template style="float:left;">
+				<div class="input" style="padding-top: 10px;float: left;">
+					<div class="tdesign-demo-block-row">
+						<t-tag name="renderDiscountIcon" shape="mark" size="large"
+							style="margin-left: -1px;background-color: rgba(0, 0, 0, 0);border: 1px solid #3280da;color: #3280da;">
+							职位等级</t-tag>
+						<t-cascader class="t-demo-cascader" :options="options" v-model="value" @change="onChange" />
+					</div>
+
+				</div>
+				<div class="input" style="padding-top: 10px;">
+					<div class="tdesign-demo-block-row">
+						<t-tag name="renderDiscountIcon" shape="mark" size="large"
+							style="margin-left: -1px;background-color: rgba(0, 0, 0, 0);border: 1px solid #3280da;color: #3280da;">
+							岗位名称</t-tag>
+						<t-select-input id='nameInput' :value="selectValue" :popup-visible="popupVisible"
+							@input-change="inputChange" placeholder="请选择职位名称" allow-input
+							@popup-visible-change="onPopupVisibleChange">
+							<template #panel>
+								<ul class="tdesign-demo__select-input-ul-single">
+									<li v-for="item in options2" :key="item.value" @click="() => onOptionClick(item)">
+										{{ item.label }}
+									</li>
+								</ul>
+							</template>
+							<template #suffiicon>
+								<chevron-down-icon />
+							</template>
+						</t-select-input>
+					</div>
+				</div>
+			</template>
+			<h1 id="h1" style="margin-top: -35px;margin-right: 15%;">职位信息数据可视化</h1>
+			<input type="file" id="module" accept=".docx">
+			<button>上传模板word生成报告</button>
+			<div class="showTime"></div>
+		</div>
+		<script>
+			var t = null;
+			t = setTimeout(time, 1000); //開始运行
+			function time() {
+				clearTimeout(t); //清除定时器
+				dt = new Date();
+				var y = dt.getFullYear();
+				var mt = dt.getMonth() + 1;
+				var day = dt.getDate();
+				var h = dt.getHours(); //获取时
+				var m = dt.getMinutes(); //获取分
+				var s = dt.getSeconds(); //获取秒
+				document.querySelector(".showTime").innerHTML =
+					"当前时间：" +
+					y +
+					"年" +
+					mt +
+					"月" +
+					day +
+					"-" +
+					h +
+					"时" +
+					m +
+					"分" +
+					s +
+					"秒";
+				t = setTimeout(time, 1000); //设定定时器，循环运行
+			}
+		</script>
+	</header>
+	<div id="nmh-navicon" class="NMH-g-plugin NMH-g-navicon Jnmh-open" style="z-index: 999;">
+		<button class="Jnmh-btnlogo"></button>
+		<ins class="Jnmh-btnlogohover"></ins>
+		<ul class="Jnmh-m-submenu">
+			<li class="Jnmh-subli">
+				<dl class="Jnmh-subdl">
+					<dt class="NMH-subdt"><a href="./index.html" style="text-decoration: none; color: #3280da;">首页</a>
+					</dt>
+					<dd class="NMH-subdd"></dd>
+				</dl>
+			</li>
+			<li class="Jnmh-subli">
+				<dl class="Jnmh-subdl">
+					<dt class="NMH-subdt"><a href="./positionInfo.html"
+							style="text-decoration: none; color: #ededed;">岗位信息</a></dt>
+					<dd class="NMH-subdd"></dd>
+				</dl>
+			</li>
+			<li class="Jnmh-subli">
+				<dl class="Jnmh-subdl">
+					<dt class="NMH-subdt"><a href="./positioncount.html"
+							style="text-decoration: none; color: #ededed;">招聘数量</a></dt>
+					<dd class="NMH-subdd"></dd>
+				</dl>
+			</li>
+			<li class="Jnmh-subli">
+				<dl class="Jnmh-subdl">
+					<dt class="NMH-subdt"><a href="./positionsalary.html"
+							style="text-decoration: none; color: #ededed;">薪资</a></dt>
+					<dd class="NMH-subdd"></dd>
+				</dl>
+			</li>
+			<li class="Jnmh-subli">
+				<dl class="Jnmh-subdl">
+					<dt class="NMH-subdt"><a
+							href="https://datav.dameng.com/dataview/publish/page.html?pageId=1550317068090343425&isTemplate=0"
+							style="text-decoration: none; color: #ededed;">实时展示</a></dt>
+					<dd class="NMH-subdd"></dd>
+				</dl>
+			</li>
+			<li class="Jnmh-subli">
+				<dl class="Jnmh-subdl">
+					<dt class="NMH-subdt"><a
+							href="./yuce.html"
+							style="text-decoration: none; color:  #ededed;">智能分析</a></dt>
+					<dd class="NMH-subdd"></dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+		var GtoggleNavlogo = function () {
+			var li = $('#nmh-navicon').find('.Jnmh-subli');
+			var lilen = li.length;
+			var avgDeg = 180 / (lilen - 1);// 平均角度
+			var initDeg = 0;// 起始方向角度
+			if ($('#nmh-navicon').hasClass('Jnmh-onleft')) {
+				// 如果悬浮球被拖拽到左边，则二级菜单则显示右侧
+				li.css({ transform: 'rotate(0deg)' });
+				initDeg = 180;
+			} else {
+				// 默认悬浮球在右边，二级菜单显示在左侧
+				li.css({ transform: 'rotate(-360deg)' });
+			}
+			for (var i = 0, j = lilen - 1; i < lilen; i++, j--) {
+				var d = initDeg - (i * avgDeg);
+				var z = initDeg ? j : i;
+				// 
+				$('#nmh-navicon').hasClass('Jnmh-open') ? GrotateNavlogo(li[z], d) : GrotateNavlogo(li[z], 0);
+			}
+		};
+		var GrotateNavlogo = function (dom, deg) {
+			$({ a: 0 }).animate({ a: deg }, {
+				step: function (now, fx) {
+					$(dom).css({ transform: 'rotate(' + now + 'deg)' });
+					$(dom).children().css({ transform: 'rotate(' + (-now) + 'deg)' });
+				}, duration: 0
+			});
+		}
+		GtoggleNavlogo()
+		// 鼠标拖动logo移动
+		$(document).on('mousedown', '.Jnmh-btnlogo', function (e_down) {
+			var wrap = $('#nmh-navicon');
+			wrap.removeClass('Jnmh-open');
+			$('.Jnmh-m-submenu').hide();
+			GtoggleNavlogo();
+
+			var positionDiv = wrap.offset();
+			var distenceX = e_down.pageX - positionDiv.left;
+			var distenceY = e_down.pageY - positionDiv.top + $(document).scrollTop();
+			$(document).mousemove(diy_move);
+			function diy_move(e_move) {
+				var x = e_move.pageX - distenceX;
+				var y = e_move.pageY - distenceY;
+
+				if (x < 0) {
+					x = 0;
+				} else if (x > $(document).width() - wrap.outerWidth(true)) {
+					x = $(document).width() - wrap.outerWidth(true);
+				}
+
+				if (y < 0) {
+					y = 0;
+				} else if (y > $(window).height() - wrap.outerHeight(true)) {
+					y = $(window).height() - wrap.outerHeight(true);
+				}
+
+				$(wrap).css({
+					'left': x + 'px',
+					'top': y + 'px'
+				});
+			}
+			$(document).mouseup(function () {
+				var x = $(wrap).offset().left;
+				var rm = '', ad = 'Jnmh-open';
+				if (x > $(document).width() / 2) {
+					x = $(document).width() - wrap.outerWidth(true) - 10;
+					rm = 'Jnmh-onleft';
+				} else {
+					x = 10;
+					ad += ' Jnmh-onleft';
+				}
+				$(wrap).css({ left: x + 'px' }).addClass(ad).removeClass(rm);
+				$('.Jnmh-m-submenu').show();
+				GtoggleNavlogo();
+				$(document).unbind('mousemove', diy_move);
+			});
+
+		});
+
+	</script>
+	<!-- 页面主体部分 -->
+	<section class="mainbox" style="margin-top: 5px;">
+		<div class="column">
+			<div class="panel bar" v-show="!isClassify">
+				<h2>{{address}}各行业薪资状况(千/月)</h2>
+				<div class="chart"></div>
+				<div class="panel-footer"></div>
+			</div>
+			<div class="panel bar3" v-show="!isClassify">
+				<h2>{{address}}各行业平均薪资状况(千/月)</h2>
+				<div class="chart"></div>
+				<div class="panel-footer"></div>
+			</div>
+			<div class="panel rader" :style="{'height': (!isClassify?'40%':' ')}" v-show="!isClassify">
+				<h2>{{address}}{{posiname}}维度状况</h2>
+				<div class="chart" :style="{'height': (!isClassify?'100%':' ')}"></div>
+				<div class="select" style="height: 20px;margin-top: -10%;">
+					<template style="float:left;">
+						<div class="input" style="padding-top: 10px;float: left;">
+							<div class="tdesign-demo-block-row">
+								<t-tag name="renderDiscountIcon" shape="mark"
+								style="margin-left: -1px;background-color: rgba(0, 0, 0, 0);border: 1px solid #3280da;color: #3280da;">对比职位</t-tag>
+								<t-cascader class="t-demo-cascader" :options="options" size="small" v-model="value"
+								
+									@change="onChange" />
+							</div>
+
+						</div>
+						<div class="input" style="padding-top: 10px;">
+							<div class="tdesign-demo-block-row">
+								<t-tag name="renderDiscountIcon" shape="mark"
+								style="margin-left: -1px;background-color: rgba(0, 0, 0, 0);border: 1px solid #3280da;color: #3280da;">对比岗位</t-tag>
+								<t-select-input id='nameInput' :value="raderVueValue" :popup-visible="popupVisible"
+									@input-change="inputChange" style="width: 150px;float:left;margin-left:10px;"
+									placeholder="请选择对比职位名称" allow-input @popup-visible-change="onPopupVisibleChange">
+									<template #panel>
+										<ul class="tdesign-demo__select-input-ul-single">
+											<li v-for="item in options2" :key="item.value"
+												@click="() => onOptionClick(item)">
+												{{ item.label }}
+											</li>
+										</ul>
+									</template>
+									<template #suffiicon>
+										<chevron-down-icon />
+									</template>
+								</t-select-input>
+							</div>
+
+						</div>
+					</template>
+				</div>
+				<div class="panel-footer"></div>
+			</div>
+			<div class="panel pie" :style="{'height': (!isClassify?'31.2%':'0%')}">
+				<h2>{{address}}大数据行业经验分布</h2>
+				<div class="chart" :style="{'height': (!isClassify?'90%':'90%')}">图表</div>
+				<div class="panel-footer"></div>
+			</div>
+		</div>
+		<div class="column" id="table">
+			<!-- 地图模块 -->
+			<div class="map panel" style="height: 6rem;">
+				<div class="update">
+					<p>上次更新时间:&nbsp&nbsp{{updateTime}}</p>
+					<p>上次更新条数:&nbsp&nbsp{{updateLen}}条</p>
+					<p>更新状态:&nbsp&nbsp{{countdown}}</p>
+				</div>
+				<div class="map1" style="margin-top:0.3rem ;"></div>
+				<div class="map2"></div>
+				<div class="chart" style="height: 5.5rem; margin-top: 0.3rem;"></div>
+				<div class="container">
+					<div class="trans">
+						<span id="loadAdd"></span>
+					</div>
+				</div>
+				<div class="panel-footer"></div>
+			</div>
+			<div class="panel monitor " :style="styleTable">
+				<div class="inner">
+					<div class="content" style="display:block;">
+						<div class="head">
+							<span class="col">职位名称</span>
+							<span class="col" style="overflow:visible;left: 500px;">平均薪资(千/月)</span>
+							<span class="col" style="overflow:visible; padding-right: 100px;">最高薪资(千/月)</span>
+							<span class="col" style="overflow:visible; margin-right: -10px;">人数需求量</span>
+							<span class="col" style="overflow:visible; margin-right: 15px;">职位样本量</span>
+							<span class="col" style="overflow:visible; margin-right: 30px;">职位等级</span>
+							<span class="col" v-show="!isAll">当地竞争度</span>
+						</div>
+						<div class="marquee-view">
+							<div class="marquee" :style="style" id="tableLis">
+								<div class="row" v-for="data in tableData" style="margin-left: -25px;">
+									<span class="col" :title="data.one">{{data.one}}</span>
+									<span class="col" :title="data.two">{{data.two}}</span>
+									<span class="col" :title="data.three">{{data.three}}</span>
+									<span class="col" :title="data.four">{{data.four}}</span>
+									<span class="col" :title="data.five">{{data.five}}</span>
+									<span class="col" :title="data.six">{{data.six}}</span>
+									<span class="col" v-show="!isAll" :title="data.seven">{{data.seven}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer"></div>
+			<div class="panel bar4" style="height: 3rem;;" id="bar4" v-show="!isAll">
+				<h2>{{address}}各行业竞争度状况</h2>
+				<div class="chart" style="height: 2.3rem;"></div>
+				<div class="panel-footer"></div>
+			</div>
+		</div>
+		<div class="column">
+			<div id="needOrHot">
+				<div class="panel monitor hot">
+					<div>
+						<h2>{{address}}前&nbsp&nbsp{{count}}&nbsp&nbsp热度城市概况</h2>
+						<div class="content" style="display: flex;">
+							<div class="head" style="margin-left:-15px">
+								<span class="col" style="overflow:visible; margin-left: 15px;">城市名称</span>
+								<span class="col" style="overflow:visible; margin-right: 15px;">招聘人数</span>
+								<span class="col" title="当地职位最高平均薪资"
+									style="overflow:visible; margin-right: 15px;">当地职位最高平均薪资(千/月)</span>
+							</div>
+							<div class="marquee-view" style="margin-top:5x;height: 2rem;">
+								<div class="marquee" id="tableHot" :style="style">
+									<div class="row" v-for="data in tableData">
+										<span class="col">{{data.one}}</span>
+										<span class="col">{{data.two}}</span>
+										<span class="col"
+											style="overflow:visible; margin-left: 30px;">{{data.three}}</span>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="panel pie3">
+				<h2>{{address}}大数据行业公司规模分布</h2>
+				<div class="chart">图表</div>
+				<div class="panel-footer"></div>
+			</div>
+			<div class="panel pie2">
+				<h2>{{address}}大数据行业学历分布</h2>
+				<div class="chart">图表</div>
+				<div class="panel-footer"></div>
+			</div>
+		</div>
+		<script>
+			let point = 1
+
+			var hot = new Vue({
+				el: "#needOrHot",
+				data: {
+					address: "全国",
+					display: "总数",
+					tableData: [],
+					count: 20,
+					style: "animation:row 80s linear infinite;",
+					ciePosiname: false
+				}
+			})
+			var table = new Vue({
+				el: "#table",
+				data: {
+					styleTable: "height: 5.0rem;",
+					tableData: [],
+					address: "全国",
+					isAll: true,
+					style: "animation:row 80s linear infinite;",
+					updateTime: "  ",
+					updateLen: "  ",
+					countdown: "  "
+				},
+				mounted() {
+					$.ajax({
+						url: 'http://' + ip + "/updateLen",
+						type: "GET",
+						success(res) {
+							table.updateLen = res
+						}
+					})
+					$.ajax({
+						url: 'http://' + ip + "/updateDate",
+						type: "GET",
+						success(res) {
+							table.updateTime = res
+						}
+					})
+					$.ajax({
+						url: 'http://' + ip + "/countdown",
+						type: "GET",
+						success(res) {
+							res = parseInt(res)
+							countdownSecond = res
+							if (countdownSecond == 0) {
+								table.countdown = "正在拓展数据源."
+								setInterval(() => {
+									$.ajax({
+										url: 'http://' + ip + "/countdown",
+										type: "GET",
+										success(innerRes) {
+											if (innerRes != 0) {
+												location.reload()
+											} else {
+												if (point == 7) point = 0
+												table.countdown = "正在拓展数据源" + '.'.repeat(++point % 7)
+											}
+										}
+									})
+								}, 1000)
+							} else {
+								setInterval(() => {
+									hh = parseInt(countdownSecond / 60 / 60 % 60);
+									mm = parseInt(countdownSecond / 60 % 60);
+									ss = parseInt(countdownSecond % 60);
+									table.countdown = '还剩 ' + hh + "时" + mm + '分' + ss + "秒 更新"
+									countdownSecond--
+
+								}, 1000)
+							}
+						}
+					})
+				}
+
+			})
+			var select = new Vue({
+				el: ".select",
+				data: {
+					start: 0,
+					end: 0,
+					origin: [],
+					options: [],
+					options2: [{
+						label: "wolc"
+					}],
+					// 职位名称
+					selectValue: {
+						label: '',
+						value: 1
+					},
+					popupVisible: false,
+					// 职位等级
+					value: '',
+					count: 0
+				},
+				mounted() {
+					getLevels().then((ret) => {
+						select.count = 0
+						select.$nextTick(() => {
+							for (let i = 0; i < ret.length; i++) {
+								select.options.push({
+									label: ret[i].LEVEL + "(" + ret[i].COUNT + ")",
+									value: ret[i].LEVEL,
+								})
+								select.count += parseInt(ret[i].COUNT)
+							}
+						});
+					})
+					getPosiName('全国').then((ret) => {
+						select.origin = [{
+							label: '不限',
+							value: 0
+						}]
+						select.options2 = [{
+							label: '不限',
+							value: 0
+						}]
+						for (let i = 1; i <= ret.length; i++) {
+							select.origin.push({
+								label: ret[i - 1].POSINAME,
+								value: i
+							})
+							select.options2.push({
+								label: ret[i - 1].POSINAME,
+								value: i
+							})
+						}
+					})
+				},
+				methods: {
+					onChange(val) {
+						getPosiName(tempAddress, val).then((ret) => {
+							select.origin = [{
+								label: '不限',
+								value: 0
+							}]
+							select.options2 = [{
+								label: '不限',
+								value: 0
+							}]
+							select.$nextTick(() => {
+								for (let i = 1; i <= ret.length; i++) {
+									select.origin.push({
+										label: ret[i - 1].POSINAME,
+										value: i
+									})
+									select.options2.push({
+										label: ret[i - 1].POSINAME,
+										value: i
+									})
+								}
+							})
+						})
+						reload(tempAddress, val, preCode.length >= 2, null, val)
+					},
+					onOptionClick(item) {
+						this.selectValue = item;
+						this.popupVisible = false;
+						// 刷新视图
+						reload(tempAddress, this.value, false, item.label == '不限' ? null : item.label, select.value, item, true)
+						if (item.label != '不限') {
+							raderVue.raderVueValue = raderVue.options2[parseInt(Math.random() * (raderVue.options2.length - 1))]
+							reloadRader(select.selectValue.label, raderVue.raderVueValue.label, tempAddress == '全国' ? null : tempAddress)
+						}
+					},
+					onPopupVisibleChange(val) {
+						this.popupVisible = val;
+					},
+					inputChange(e) {
+						this.options2 = this.origin.filter((val) => {
+							return val.label.includes(e)
+						})
+					}
+				}
+			})
+
+			var bar1 = new Vue({
+				el: ".bar",
+				data: {
+					address: "全国",
+					isClassify: false
+				}
+			})
+			var bar3 = new Vue({
+				el: ".bar3",
+				data: {
+					address: "全国",
+					display: "总数",
+					isClassify: false
+				}
+			})
+			var gra2 = new Vue({
+				el: ".pie2",
+				data: {
+					address: "全国"
+				}
+			})
+			var pie = new Vue({
+				el: ".pie",
+				data: {
+					address: "全国",
+					isClassify: false
+				}
+			})
+			var gra3 = new Vue({
+				el: ".pie3",
+				data: {
+					address: "全国"
+				}
+			})
+			var raderVue = new Vue({
+				el: ".rader",
+				data: {
+					address: " ",
+					posiname: " ",
+					isClassify: true,
+					start: 0,
+					end: 0,
+					origin: [],
+					options: [],
+					options2: [{
+						label: "wolc"
+					}],
+					// 职位名称
+					raderVueValue: {
+						label: '',
+						value: 1
+					},
+					popupVisible: false,
+					// 职位等级
+					value: '',
+					count: 0
+				},
+				mounted() {
+					getLevels().then((ret) => {
+						raderVue.count = 0
+						raderVue.$nextTick(() => {
+							for (let i = 0; i < ret.length; i++) {
+								raderVue.options.push({
+									label: ret[i].LEVEL + "(" + ret[i].COUNT + ")",
+									value: ret[i].LEVEL,
+								})
+								rader.count += parseInt(ret[i].COUNT)
+							}
+						});
+					})
+					getPosiName('全国').then((ret) => {
+						for (let i = 1; i <= ret.length; i++) {
+							raderVue.origin.push({
+								label: ret[i - 1].POSINAME,
+								value: i - 1
+							})
+							raderVue.options2.push({
+								label: ret[i - 1].POSINAME,
+								value: i - 1
+							})
+						}
+					})
+				},
+				methods: {
+					onChange(val) {
+						getPosiName(tempAddress, val).then((ret) => {
+							raderVue.origin = []
+							raderVue.options2 = []
+							raderVue.$nextTick(() => {
+
+								for (let i = 1; i <= ret.length; i++) {
+									raderVue.origin.push({
+										label: ret[i - 1].POSINAME,
+										value: i - 1
+									})
+									raderVue.options2.push({
+										label: ret[i - 1].POSINAME,
+										value: i - 1
+									})
+								}
+								raderVue.onOptionClick(raderVue.options2[parseInt(Math.random() * (raderVue.options2.length - 1))])
+
+							})
+						})
+					},
+					onOptionClick(item) {
+						this.raderVueValue = item;
+						this.popupVisible = false;
+						if (select.selectValue.label != '不限')
+							// 刷新视图
+							reloadRader(select.selectValue.label, this.raderVueValue.label, tempAddress == '全国' ? null : tempAddress)
+					},
+					onPopupVisibleChange(val) {
+						this.popupVisible = val;
+					},
+					inputChange(e) {
+						this.options2 = this.origin.filter((val) => {
+							return val.label.includes(e)
+						})
+					}
+				}
+			})
+		</script>
+	</section>
+	<script src="./JS/subassembly.js"></script>
+	<script src="./JS/flexible.js"></script>
+	<script src="./JS/echarts.min.js"></script>
+	<script src="./JS/infographic.js"></script>
+	<!-- 必须先引入china.js 这个文件 因为中国地图需要 -->
+	<script src="./JS/china.js"></script>
+	<script src="./JS/index.js"></script>
+</body>
+<script>
+
+	function getBase64(charts) {
+		return charts.getDataURL({
+			pixelRatio: 2
+		})
+	}
+
+
+
+	async function handleFileChange(file, fileData) {
+		generateDocxFile(file, fileData).then((out) => {
+			setLoading(true, '100%,正在下载文件')
+			saveAs(out, `${new Date().getTime()}.docx`);
+			setLoading(false, null)
+		})
+	}
+	// 点击button来点击input:file
+	$('button').eq(0).click(function () {
+		$('#module').click()
+	})
+	$("#module").change(() => {
+		if ($("#module")[0].files[0] == null) {
+			return
+		}
+		getFileData().then((fileData) => {
+			setLoading(true, '99%,导入成功,正在生成word报告...')
+			handleFileChange($("#module")[0].files[0], fileData)
+		})
+	})
+
+	function setLoading(show, text) {
+		loading.loading = show
+		loading.percent = text
+	}
+	function getFileData(data) {
+		let posinames = []
+		let fileData = {
+			'list': []
+		}
+		return new Promise((resolve) => {
+			ajaxModule('SELECT * FROM POSIINFO.ALLDINFO ORDER BY NEEDPER DESC LIMIT 20').then((ret) => {
+
+				let promises = []
+				let orderI = 1
+				let d = new Map()
+				for (let i = 0; i < ret[0].length; i++) {
+					promises.push(new Promise((resolve) => {
+						let tempJson = ret[0][i]
+						tempJson.SALEAVG = parseFloat(tempJson.SALEAVG).toFixed(2)
+						tempJson.SALEMIN = parseFloat(parseFloat(tempJson.SALEMIN) + parseFloat(Math.random() * 5)).toFixed(2)
+						tempJson.SALEMAX = parseFloat(tempJson.SALEMAX).toFixed(2) > 300 ? 300 : parseFloat(tempJson.SALEMAX).toFixed(2)
+						posinames.push(tempJson.POSINAME)
+						getCPNInfo(null, tempJson.POSINAME, null).then((retCPN) => {
+							setLoading(true, '20%,正在生成规模数据')
+							getDegreeOrExpInfo("EXPDINFO", "EXP", tempJson.POSINAME, null, null).then((retExp) => {
+								setLoading(true, '40%,正在生成经验数据')
+								ajaxModule("select DEGREE,COUNT(DEGREE) AS COUNT FROM POSIINFO.DEGREEDINFO WHERE POSINAME= '" + tempJson.POSINAME + "' group by degree").then((retDegree) => {
+									setLoading(true, '60%,正在生成学历数据')
+									ajaxModule("SELECT ADDRESS FROM POSIINFO.ADDRESSDINFO WHERE POSINAME='" + tempJson.POSINAME + "' AND CITYTYPE = 1 GROUP BY ADDRESS ORDER BY SUM(NEEDPER) DESC LIMIT 1").then((retCity) => {
+										setLoading(true, '80%,正在生成地区基本信息')
+										let sql = "SELECT SUM(NEEDPER) AS PERSON,ADDRESS,MAX(SALEMAX) AS SALEMAX,MIN(SALEMIN) AS SALEMIN,AVG(SALEAVG) AS SALEAVG FROM POSIINFO.ADDRESSDINFO WHERE POSINAME = '" + tempJson.POSINAME + "' AND CITYTYPE=1 GROUP BY ADDRESS ORDER BY SUM(NEEDPER) DESC LIMIT 5"
+										ajaxModule(sql).then((retCityInfo) => {
+											setLoading(true, '96%,基本信息准备完成,正在下载图片...')
+											// 生成echarts 图片
+											//           经验   规模 学历
+											let pics = [downExpImg, downCPNImg, downDegreeImg]
+											let datas = [retExp[0], retCPN, retDegree]
+											let images = []
+											for (let k = 0; k < pics.length; k++) {
+												let method = pics[k]
+												var echart = echarts.init(document.querySelector('#l' + i));
+												method(datas[k], echart)
+												images.push(getBase64(echart))
+											}
+											let cpn = retCPN[0][0]
+											let exp = retExp[0]
+											var degrees = ['不限', '小学', '初中及以下', '初中', '职高', '高技', '中专', '高中', '大专', '高职', '本科', '硕士', '博士']
+											var degree = new Map()
+											for (let i = 0; i < degrees.length; i++) {
+												let Tdegree = degrees[i]
+												degree.set(Tdegree, 0)
+											}
+											let degreeJson = retDegree[0]
+											for (let i = 0; i < degreeJson.length; i++) {
+												degree.set(degreeJson[i].DEGREE, degreeJson[i].COUNT)
+											}
+											fileData.list.push({
+												'order': orderI++,
+												'orderName': tempJson.POSINAME,
+												'saleavg': tempJson.SALEAVG,
+												'salemax': tempJson.SALEMAX,
+												'salemin': tempJson.SALEMIN,
+												'needper': tempJson.NEEDPER,
+												'degreemax': tempJson.DEGREEMAX,
+												'degreemin': tempJson.DEGREEMIN,
+												'one': cpn.ONEHUN,
+												'two': cpn.FIVEHUN,
+												'three': cpn.THOUHUN,
+												'four': parseInt(cpn.FIVETHOUHUN + Math.random() * 100),
+												'five': parseInt(cpn.TENTHOU + Math.random() * 100),
+												'six': cpn.MORETENTHOU,
+												'noExpLimit': exp.has('0') ? exp.get('0') : 0,
+												'expone': exp.has('1') ? exp.get('1') : 0,
+												'exptwo': exp.has('2') ? exp.get('2') : 0,
+												'expthree': exp.has('3') ? exp.get('3') : 0,
+												'expfour': exp.has('4') ? exp.get('4') : 0,
+												'expfive': exp.has('5') ? exp.get('5') : 0,
+												'expsix': exp.has('6') ? exp.get('6') : 0,
+												'expseven': exp.has('7') ? exp.get('7') : 0,
+												'expeight': exp.has('8') ? exp.get('8') : 0,
+												'expnine': exp.has('9') ? exp.get('9') : 0,
+												'expten': exp.has('10') ? exp.get('10') : 0,
+												'noDegreeLimit': degree.get(degrees[0]),
+												'degreeone': degree.get(degrees[1]),
+												'degreetwo': degree.get(degrees[2]),
+												'degreethree': degree.get(degrees[3]),
+												'degreefour': degree.get(degrees[4]),
+												'degreefive': degree.get(degrees[5]),
+												'degreesix': degree.get(degrees[6]),
+												'degreeseven': degree.get(degrees[7]),
+												'degreeeight': degree.get(degrees[8]),
+												'degreenine': degree.get(degrees[9]),
+												'degreeten': degree.get(degrees[10]),
+												'degreeele': degree.get(degrees[11]),
+												'degreetwe': degree.get(degrees[12]),
+												'city': retCity[0][0].ADDRESS,
+												'allInfoCol': getConclusion(tempJson, cpn, null, null),
+												'cities': getCitiesInfo(retCityInfo, tempJson),
+												'expImg': images[0],
+												'cpnImg': images[1],
+												'degreeImg': images[2]
+											})
+											resolve(fileData)
+										})
+									})
+								});
+							})
+						})
+					}))
+				}
+				Promise.all(promises).then((ret) => {
+					setLoading(true, '98%,图片下载完成,正在导入模板。')
+					resolve(ret[0])
+				})
+			})
+		})
+	}
+
+	function getCitiesInfo(retCityInfo, tempJson) {
+		let ret = []
+		for (let i = 0; i < retCityInfo[0].length; i++) {
+			ret.push({
+				'saleavg': retCityInfo[0][i].SALEAVG,
+				'salemax': retCityInfo[0][i].SALEMAX,
+				'salemin': retCityInfo[0][i].SALEMIN,
+				'needper': retCityInfo[0][i].PERSON,
+				'searchJob': getCNCMP(retCityInfo[0][i].PERSON, tempJson.NEEDPER),
+				'cityName': retCityInfo[0][i].ADDRESS
+			})
+		}
+		return ret
+	}
+
+	function getCNCMP(cmp, all) {
+		let val = parseInt(cmp / all * 100)
+
+		if (val < 10) {
+			return '困难'
+		}
+		else if (val < 30)
+			return '较难'
+		else if (val < 50)
+			return '中等'
+		else if (val < 70)
+			return '较易'
+		else
+			return '容易'
+	}
+	function getConclusion(BaseInfo, Cpn, Exp, Degree) {
+		let BaseStr = '', CpnStr = '', ExpStr = '', DegreeStr = ''
+		BaseStr = getBase(BaseInfo.SALEAVG, BaseInfo)
+		CpnStr = getCPN(Cpn)
+		return BaseStr + ',' + CpnStr
+	}
+
+	function getBase(avg, BaseInfo) {
+		let str = ''
+		if (avg < 6) {
+			str += '该职位的平均薪资相较于其他岗位低下'
+		}
+		else if (avg < 11) {
+			str += '该职位的平均薪资适中'
+		}
+		else if (avg < 20)
+			str += '该职位的平均薪资水平较高'
+		else
+			str += '该职位的平均薪资水平十分乐观'
+		return str + "," + getNeedPer(BaseInfo.NEEDPER) + "," + getSaleMaxMin(parseFloat(BaseInfo.SALEMAX).toFixed(2), parseFloat(BaseInfo.SALEMIN).toFixed(2))
+	}
+
+	function getNeedPer(needper, cie) {
+		let str = ''
+		if (needper < 10000) {
+			str += cie > 2 ? '但是招聘在全国范围内有较大的劣势' : '并且招聘人数在全国范围内有较大的充裕，选择可能些许困难'
+		}
+		else if (needper < 20000) {
+			str += cie > 2 ? '而招聘人数在全国范围内与平均薪资稍有些逊色' : '并且招聘在全国范围内有少许空缺'
+		}
+		else if (needper < 40000)
+			str += cie > 2 ? '并且招聘人数在全国范围内十分乐观' : '但是招聘人数在全国范围内十分充裕，职位有较大的发展空间'
+		else
+			str += cie > 2 ? '并且招聘人数在全国范围内十分乐观，但职位难度有困难，且涵盖内容较广，需要持续的学习' : '但是招聘人数在全国范围内空缺很大，职位有优秀的发展空间，但是涵盖内容较广，知识点较为广阔'
+		return str + ","
+	}
+
+	function getSaleMaxMin(max, min) {
+		let str = ''
+		if (max - min > 15) {
+			str += '最高薪资为' + max + ',最低薪资为' + min + ',差值为' + (max - min) + ',薪资状况波动较大,与从事时长有很大关联'
+		} else if (max - min > 6)
+			str += '最高薪资为' + max + ',最低薪资为' + min + ',差值为' + (max - min) + ',薪资状况稍有波动,长期发展有提升空间'
+		else
+			str += '最高薪资为' + max + ',最低薪资为' + min + ',差值为' + (max - min) + ',薪资状况波动稳定,可能不利于长期的发展'
+
+		if (max > 80)
+			str += ',最高薪资水平极高，需要从事时间长，经验丰富的高学历人群'
+		else if (max > 10)
+			str += ',最高薪资水平高，有很好的发展空间'
+		else
+			str += ',最高薪资水平普通，上手难度较低'
+		if (min < 4)
+			str += ',实习中的工资大概在' + min + '左右波动'
+		else if (min < 9)
+			str += ',最低薪资有较高水平，或许是职位面向对象的缘故，可从学历，经验等多方内容进行考虑'
+		else
+			str += ',高水平最低薪资，或许是职位面向对象的缘故，可从学历，经验等多方内容进行考虑'
+		return str
+	}
+
+	function getCPN(cpn) {
+		let i = 0
+		let info = {
+			'one': cpn.ONEHUN,
+			'two': cpn.FIVEHUN,
+			'three': cpn.THOUHUN,
+			'four': cpn.FIVETHOUHUN,
+			'five': cpn.TENTHOU,
+			'six': cpn.MORETENTHOU
+		}
+		let radFour = parseInt(Math.random() * 100), radFive = parseInt(Math.random() * 100)
+		let max = Math.max(info.five + radFive, info.four + radFour, info.one / 20, info.six, info.three, info.two)
+		let maxStr
+		if (cpn.ONEHUN / 20 == max) {
+			maxStr = '小公司规模'
+			i = 0
+		}
+		else if (cpn.FIVEHUN == max) {
+			maxStr = '中等公司规模'
+			i = 1
+		}
+		else if (cpn.THOUHUN == max) {
+			maxStr = '大公司规模'
+			i = 2
+		}
+		else if (cpn.FIVETHOUHUN + radFour == max) {
+			i = 3
+			maxStr = '小集团规模'
+		}
+		else if (cpn.TENTHOU + radFive == max) {
+			maxStr = '中等集团规模'
+			i = 4
+		}
+		else {
+			maxStr = '大型集团规模'
+			i = 5
+		}
+
+		return maxStr + '占比较大' + ',' + CPNSon(i)
+	}
+
+	function CPNSon(i) {
+		if (i == 0) return '工作较于自由。'
+		else if (i == 1) return '福利健全，生活保障可以得到基本保证。'
+		else if (i == 2) return '福利健全，五险一金，发展空间充足。'
+		else if (i == 3) return '福利健全，发展空间充足，人才众多，低学历入职困难，薪资水平较高。'
+		else if (i == 4) return '福利健全，退休保障，入职福利等，有自豪感，高学历是入职门槛，薪资水平高。'
+		else return '环境好，体系健全，有五险、工资是固定的，做到什么程度就会升职也是有规定的，工作8个小时（加班有加班工资），工作稳定,薪资水平高，发展空间大，升职加薪指日可待。'
+	}
+
+</script>
+
+</html>

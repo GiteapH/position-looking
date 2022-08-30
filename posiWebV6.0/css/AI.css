@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  li {
+    list-style: none;
+  }
+  @font-face {
+    font-family: electronicFont;
+    src: url(../font/DS-DIGIT.TTF);
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    /*  背景图定位 / 背景图尺寸  cover 完全铺满容器  contain 完整显示在容器内 */
+    background: url(../images/bg.jpg) no-repeat #000;
+    background-size: cover;
+    /* 行高是字体1.15倍 */
+    line-height: 1.15;
+  }
+  header {
+    position: relative;
+    height: 1.25rem;
+    background: url(../images/head_bg.png) no-repeat top center;
+    background-size: 100% 100%;
+  }
+  header h1 {
+    font-size: 0.475rem;
+    color: #fff;
+    text-align: center;
+    line-height: 1rem;
+  }
+  header .showTime {
+    position: absolute;
+    top: 0;
+    right: 0.375rem;
+    line-height: 0.9375rem;
+    font-size: 0.25rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .mainbox {
+    min-width: 1024px;
+    max-width: 1920px;
+    padding: 0.125rem 0.125rem 0;
+    display: flex;
+  }
+  .mainbox .panel {
+    position: relative;
+    height: 3.65rem;
+    padding: 0 0.1875rem 0.5rem;
+    border: 1px solid rgba(25, 186, 139, 0.17);
+    margin-bottom: 0.1875rem;
+    background: url(../images/line\(1\).png) rgba(255, 255, 255, 0.03);
+  }
+  .mainbox .panel::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-left: 2px solid #02a6b5;
+    border-top: 2px solid #02a6b5;
+    content: "";
+  }
+  .mainbox .panel::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #02a6b5;
+    border-top: 2px solid #02a6b5;
+    content: "";
+  }
+  .mainbox .panel .panel-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .mainbox .panel .panel-footer::before {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    border-left: 2px solid #02a6b5;
+    border-bottom: 2px solid #02a6b5;
+    content: "";
+  }
+  .mainbox .panel .panel-footer::after {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #02a6b5;
+    border-bottom: 2px solid #02a6b5;
+    content: "";
+  }
+  .map {
+    
+    height: 10.125rem;
+  }
+  .map .chart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    height: 10.125rem;
+    width: 100%;
+  }
+  .map .map1,
+  .map .map2,
+  .map .map3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6.475rem;
+    height: 6.475rem;
+    background: url(../images/map.png) no-repeat;
+    background-size: 100% 100%;
+    opacity: 0.3;
+  }
+  .map .map2 {
+    width: 8.0375rem;
+    height: 8.0375rem;
+    background-image: url(../images/lbx.png);
+    opacity: 0.6;
+    animation: rotate 15s linear infinite;
+    z-index: 2;
+  }
+  .map .map3 {
+    width: 7.075rem;
+    height: 7.075rem;
+    background-image: url(../images/jt.png);
+    animation: rotate1 10s linear infinite;
+  }
+  @keyframes rotate {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  @keyframes rotate1 {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(-360deg);
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    html {
+      font-size: 42px !important;
+    }
+  }
+  @media screen and (min-width: 1920) {
+    html {
+      font-size: 80px !important;
+    }
+  }
+  

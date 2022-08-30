@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数据可视化</title>
+    <link rel="stylesheet" href="./css/yuce.css" />
+    <!-- 先引入jquery -->
+    <script src="./JS/jquery.js"></script>
+    <link rel="stylesheet" href="./css/tdesign.css" />
+    <link rel="stylesheet" href="./css/menu.css">
+    <link rel="stylesheet" href="./css/loading.css">
+    <script src="./JS/vue.js"></script>
+    <script src="./JS/tdesign.js"></script>
+    <script src="./JS/jquery.js"></script>
+
+    <style>
+        .no {
+            background: rgba(101, 132, 226, 0.1);
+            padding: 0.1875rem;
+        }
+
+        .no .no-hd {
+            position: relative;
+            border: 1px solid rgba(25, 186, 139, 0.17);
+        }
+
+        .no .no-hd::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: "";
+            width: 30px;
+            height: 10px;
+            border-top: 2px solid #02a6b5;
+            border-left: 2px solid #02a6b5;
+        }
+
+        .no .no-hd::after {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            content: "";
+            width: 30px;
+            height: 10px;
+            border-right: 2px solid #02a6b5;
+            border-bottom: 2px solid #02a6b5;
+        }
+
+        .no .no-hd ul {
+            display: flex;
+        }
+
+        .no .no-hd ul li {
+            position: relative;
+            flex: 1;
+            line-height: 1rem;
+            font-size: 0.875rem;
+            color: #0f62fcb9;
+            text-align: center;
+            font-family: "electronicFont";
+        }
+
+        .no .no-hd ul li::after {
+            content: "";
+            position: absolute;
+            top: 25%;
+            right: 0;
+            height: 50%;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .no .no-bd ul {
+            display: flex;
+        }
+
+        .no .no-bd ul li {
+            flex: 1;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.225rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            padding-top: 0.125rem;
+        }
+
+        .table13_3 {
+            margin-top: 0.2rem;
+            margin-left:0.5rem;
+            padding: 0 0;
+            display: flex;
+            flex-direction: column;
+            top: 0.1rem;
+            right: -1rem;
+            bottom: 0.1rem;
+            left: -1rem;
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .table13_3 tr {
+            font-weight: bold;
+            color: #44b2f7;
+            line-height: .7rem;
+        }
+
+        .table13_3,
+        .table13_3 th {
+            text-align: center;
+            padding: 8px;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        .t-demo-cascader {
+            width: 150px;
+            background-color: rgba(0, 0, 0, 0);
+            margin-left: 10px;
+            float: left;
+            color: #3280da;
+            border: #3280da 1px solid;
+        }
+
+        .t-cascader__placeholder {
+            color: #3280da;
+        }
+
+        .t-cascader__content {
+            color: #3280da;
+        }
+
+        #nameInput {
+            width: 150px;
+            float: left;
+            margin-left: 1rem;
+        }
+
+        .t-input {
+            background-color: rgba(0, 0, 0, 0);
+            border: 1px solid #3280da;
+        }
+
+        .t-input__inner::-webkit-input-placeholder {
+            color: #3280da;
+        }
+
+        .t-input__inner {
+            color: #3280da
+        }
+
+        #module {
+            opacity: 0;
+        }
+
+
+        .rader .t-input {
+            height: 24px;
+        }
+
+        .update {
+            position: absolute;
+            color: rgb(198, 255, 250);
+            font-size: 15px;
+        }
+
+        .update p {
+            margin-top: 15px;
+        }
+
+        .input {
+            width: auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            flex: 1 0 auto;
+        }
+
+        .t-form__label {
+            color: #ededed;
+        }
+
+        .tdesign-demo__select-input-ul-single {
+            padding: 4px 0;
+            height: 300px;
+            overflow-y: scroll;
+        }
+
+        .tdesign-demo__select-input-ul-single::-webkit-scrollbar-thumb {
+            /*滚动条里面小方块*/
+            border-radius: 10px;
+            background-color: skyblue;
+            background-image: -webkit-linear-gradient(45deg,
+                    rgba(255, 255, 255, 0.2) 25%,
+                    transparent 25%,
+                    transparent 50%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    rgba(255, 255, 255, 0.2) 75%,
+                    transparent 75%,
+                    transparent);
+        }
+
+        .tdesign-demo__select-input-ul-single::-webkit-scrollbar-track {
+            /*滚动条里面轨道*/
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            background: #ededed;
+            border-radius: 10px;
+        }
+
+        .tdesign-demo__select-input-ul-single>li {
+            display: block;
+            border-radius: 3px;
+            height: 40px;
+            line-height: 22px;
+            cursor: pointer;
+            padding: 9px 8px;
+            color: var(--td-text-color-primary);
+            transition: background-color 0.2s cubic-bezier(0.38, 0, 0.24, 1);
+            white-space: nowrap;
+            word-wrap: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tdesign-demo__select-input-ul-single>li:hover {
+            background-color: var(--td-bg-color-container-hover);
+        }
+    </style>
+</head>
+<script>
+    var tempAddress = "全国"
+    var preCode = [
+        ['100000', '全国']
+    ]
+    $(window).resize(function () {
+        //执行代码块
+        let ww = $(window).width();
+        if (ww < 1112)
+            $("#h1").hide()
+        else
+            $("#h1").show()
+
+        if (ww < 729)
+            $(".showTime").hide()
+        else
+            $(".showTime").show()
+    });
+</script>
+
+<body>
+    <header>
+
+        <h1 id="h1" style="margin-top: 5px;">职位智能分析预测</h1>
+        <div class="showTime"></div>
+
+        <script>
+            var t = null;
+            t = setTimeout(time, 1000); //開始运行
+            function time() {
+                clearTimeout(t); //清除定时器
+                dt = new Date();
+                var y = dt.getFullYear();
+                var mt = dt.getMonth() + 1;
+                var day = dt.getDate();
+                var h = dt.getHours(); //获取时
+                var m = dt.getMinutes(); //获取分
+                var s = dt.getSeconds(); //获取秒
+                document.querySelector(".showTime").innerHTML =
+                    "当前时间：" +
+                    y +
+                    "年" +
+                    mt +
+                    "月" +
+                    day +
+                    "-" +
+                    h +
+                    "时" +
+                    m +
+                    "分" +
+                    s +
+                    "秒";
+                t = setTimeout(time, 1000); //设定定时器，循环运行
+            }
+        </script>
+    </header>
+    <div id="nmh-navicon" class="NMH-g-plugin NMH-g-navicon Jnmh-open" style="z-index: 999;">
+        <button class="Jnmh-btnlogo"></button>
+        <ins class="Jnmh-btnlogohover"></ins>
+        <ul class="Jnmh-m-submenu">
+            <li class="Jnmh-subli">
+                <dl class="Jnmh-subdl">
+                    <dt class="NMH-subdt"><a href="./index.html" style="text-decoration: none; color: #ededed;">首页</a>
+                    </dt>
+                    <dd class="NMH-subdd"></dd>
+                </dl>
+            </li>
+            <li class="Jnmh-subli">
+                <dl class="Jnmh-subdl">
+                    <dt class="NMH-subdt"><a href="./positionInfo.html"
+                            style="text-decoration: none; color: #ededed;">岗位信息</a>
+                    </dt>
+                    <dd class="NMH-subdd"></dd>
+                </dl>
+            </li>
+            <li class="Jnmh-subli">
+                <dl class="Jnmh-subdl">
+                    <dt class="NMH-subdt"><a href="./positioncount.html"
+                            style="text-decoration: none; color: #ededed;">招聘数量</a>
+                    </dt>
+                    <dd class="NMH-subdd"></dd>
+                </dl>
+            </li>
+            <li class="Jnmh-subli">
+                <dl class="Jnmh-subdl">
+                    <dt class="NMH-subdt"><a href="./positionsalary.html"
+                            style="text-decoration: none; color: #ededed;">薪资</a>
+                    </dt>
+                    <dd class="NMH-subdd"></dd>
+                </dl>
+            </li>
+            <li class="Jnmh-subli">
+                <dl class="Jnmh-subdl">
+                    <dt class="NMH-subdt"><a
+                            href="https://datav.dameng.com/dataview/publish/page.html?pageId=1550317068090343425&isTemplate=0"
+                            style="text-decoration: none; color: #ededed;">实时展示</a></dt>
+                    <dd class="NMH-subdd"></dd>
+                </dl>
+            </li>
+            <li class="Jnmh-subli">
+                <dl class="Jnmh-subdl">
+                    <dt class="NMH-subdt"><a
+                            href="./yuce.html"
+                            style="text-decoration: none; color: #3280da;">智能分析</a></dt>
+                    <dd class="NMH-subdd"></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        var GtoggleNavlogo = function () {
+            var li = $('#nmh-navicon').find('.Jnmh-subli');
+            var lilen = li.length;
+            var avgDeg = 180 / (lilen - 1);// 平均角度
+            var initDeg = 0;// 起始方向角度
+            if ($('#nmh-navicon').hasClass('Jnmh-onleft')) {
+                // 如果悬浮球被拖拽到左边，则二级菜单则显示右侧
+                li.css({ transform: 'rotate(0deg)' });
+                initDeg = 180;
+            } else {
+                // 默认悬浮球在右边，二级菜单显示在左侧
+                li.css({ transform: 'rotate(-360deg)' });
+            }
+            for (var i = 0, j = lilen - 1; i < lilen; i++, j--) {
+                var d = initDeg - (i * avgDeg);
+                var z = initDeg ? j : i;
+                // 
+                $('#nmh-navicon').hasClass('Jnmh-open') ? GrotateNavlogo(li[z], d) : GrotateNavlogo(li[z], 0);
+            }
+        };
+        var GrotateNavlogo = function (dom, deg) {
+            $({ a: 0 }).animate({ a: deg }, {
+                step: function (now, fx) {
+                    $(dom).css({ transform: 'rotate(' + now + 'deg)' });
+                    $(dom).children().css({ transform: 'rotate(' + (-now) + 'deg)' });
+                }, duration: 0
+            });
+        }
+        GtoggleNavlogo()
+        // 鼠标拖动logo移动
+        $(document).on('mousedown', '.Jnmh-btnlogo', function (e_down) {
+            var wrap = $('#nmh-navicon');
+            wrap.removeClass('Jnmh-open');
+            $('.Jnmh-m-submenu').hide();
+            GtoggleNavlogo();
+
+            var positionDiv = wrap.offset();
+            var distenceX = e_down.pageX - positionDiv.left;
+            var distenceY = e_down.pageY - positionDiv.top + $(document).scrollTop();
+            $(document).mousemove(diy_move);
+            function diy_move(e_move) {
+                var x = e_move.pageX - distenceX;
+                var y = e_move.pageY - distenceY;
+
+                if (x < 0) {
+                    x = 0;
+                } else if (x > $(document).width() - wrap.outerWidth(true)) {
+                    x = $(document).width() - wrap.outerWidth(true);
+                }
+
+                if (y < 0) {
+                    y = 0;
+                } else if (y > $(window).height() - wrap.outerHeight(true)) {
+                    y = $(window).height() - wrap.outerHeight(true);
+                }
+
+                $(wrap).css({
+                    'left': x + 'px',
+                    'top': y + 'px'
+                });
+            }
+            $(document).mouseup(function () {
+                var x = $(wrap).offset().left;
+                var rm = '', ad = 'Jnmh-open';
+                if (x > $(document).width() / 2) {
+                    x = $(document).width() - wrap.outerWidth(true) - 10;
+                    rm = 'Jnmh-onleft';
+                } else {
+                    x = 10;
+                    ad += ' Jnmh-onleft';
+                }
+                $(wrap).css({ left: x + 'px' }).addClass(ad).removeClass(rm);
+                $('.Jnmh-m-submenu').show();
+                GtoggleNavlogo();
+                $(document).unbind('mousemove', diy_move);
+            });
+
+        });
+
+    </script>
+
+    <!-- 页面主体部分 -->
+    <section class="mainbox">
+
+        <div class="column">
+            <div class="panel horBar" style="height:315px;">
+                <h2 style="font-size: 25px;">智能分析关联图</h2>
+                <div class="chart" style="height:320px;padding-bottom: 35px;"></div>
+                <div class="panel-footer"></div>
+            </div>
+            <div class="panel table" style="height: 6.5rem;">
+                <h2 style="font-size: 30px;margin-top: 0.3rem;">岗位智能分析</h2>
+                <div style="text-align: center;">
+                    <table class=table13_3>
+                        <tr v-for="data in tableData">
+                            <th>{{data[0]}}</th>
+                            <th>{{data[1]}}</th>
+                            <th>{{data[2]}}</th>
+                            <th>{{data[3]}}</th>
+                            <th>{{data[4]}}</th>
+                            <th>{{data[5]}}</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel-footer"></div>
+            </div>
+        </div>
+        <div class="column" style="margin-left: 15px;">
+            <div class="select" style="height: 80px;">
+                <template style="float:left;">
+                    <div class="input" style="padding-top: 10px;float: left;">
+                        <div class="tdesign-demo-block-row">
+                            <t-tag name="renderDiscountIcon" shape="mark" size="large"
+                                style="margin-left: -1px;background-color: rgba(0, 0, 0, 0);border: 1px solid #3280da;color: #3280da;">
+                                岗位聚类</t-tag>
+                            <t-cascader class="t-demo-cascader" :options="options" v-model="value" @change="onChange" />
+                        </div>
+
+                    </div>
+                    <div class="input" style="padding-top: 10px;">
+                        <div class="tdesign-demo-block-row">
+                            <t-tag name="renderDiscountIcon" shape="mark" size="large"
+                                style="margin-left: -1px;background-color: rgba(0, 0, 0, 0);border: 1px solid #3280da;color: #3280da;">
+                                推荐岗位</t-tag>
+                            <t-select-input id='nameInput' :value="selectValue" :popup-visible="popupVisible"
+                                @input-change="inputChange" placeholder="请选择职位名称" allow-input
+                                @popup-visible-change="onPopupVisibleChange">
+                                <template #panel>
+                                    <ul class="tdesign-demo__select-input-ul-single">
+                                        <li v-for="item in options2" :key="item.value"
+                                            @click="() => onOptionClick(item)">
+                                            {{ item.label }}
+                                        </li>
+                                    </ul>
+                                </template>
+                                <template #suffiicon>
+                                    <chevron-down-icon />
+                                </template>
+                            </t-select-input>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="outter">
+                <!-- no模块制作 -->
+                <div class="no">
+                    <div class="no-hd" id="left">
+                        <ul>
+                            <li>{{needper}}</li>
+                            <li>{{saleavg}}</li>
+                        </ul>
+                    </div>
+                    <div class="no-bd">
+                        <ul>
+                            <li><b>{{posiname}}</b>需求人数预测</li>
+                            <li><b>{{posiname}}</b>平均薪资(k/月)预测</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel skills " style="height:520px;">
+                <h2><b>{{posiname}}</b>岗位的专业技术未来趋势预测</h2>
+                <div class="chart" style="height:520px;"></div>
+                <div class="panel-footer"></div>
+            </div>
+
+        </div>
+    </section>
+    <script src="./JS/flexible.js"></script>
+    <!-- 必须先引入china.js 这个文件 因为中国地图需要 -->
+    <script src="./JS/echarts.min.js"></script>
+    <script src="./JS/requestAPI.js"></script>
+    <script src="./JS/usefulInfo.js"></script>
+    <script src="./JS/subassembly.js"></script>
+    <script src="./JS/aiAnsyle.js"></script>
+    <script src="./JS/e-wordclouds.min.js"></script>
+
+</body>
+<script>
+
+    let outter = new Vue({
+        el: ".outter",
+        data: {
+            needper: '连接中...',
+            saleavg: '连接中...',
+            posiname: "----  "
+        }
+    })
+    let table = new Vue({
+        el: ".table",
+        data: {
+            tableData: [["       "]]
+        },
+        mounted() {
+            posiNeedAI(echarts.init(document.querySelector(".horBar .chart")))
+        }
+    })
+    var select = new Vue({
+        el: ".select",
+        data: {
+            start: 0,
+            end: 0,
+            origin: [],
+            options: [],
+            options2: [],
+            // 职位名称
+            selectValue: '',
+            popupVisible: false,
+            // 职位等级
+            value: null,
+            count: 0
+        },
+        mounted() {
+            reloadAiAnsyle("大数据工程师").then(maps => {
+                let f = 1
+                maps[1].forEach((val,key)=>{
+                    if (f == 1) {
+                        select.origin = val
+                        select.options2 = val
+                    }
+                    select.options.push({
+                        label: key,
+                        value: f
+                    })
+                    f++                   
+                })
+                select.selectValue = select.options2[0]
+                
+            })
+        },
+        methods: {
+            onChange(val) {
+                let BigClass = select.options[val-1].label
+                this.origin = selectMap.get(BigClass)
+                this.options2 = selectMap.get(BigClass)
+                this.selectValue = this.options2[0]
+                reloadAiAnsyle(this.selectValue.label)
+            
+            },
+            onOptionClick(item) {
+                this.selectValue = item;
+                this.popupVisible = false;
+                // 刷新视图
+
+            },
+            onPopupVisibleChange(val) {
+                this.popupVisible = val;
+            },
+            inputChange(e) {
+                this.options2 = this.origin.filter((val) => {
+                    return val.label.includes(e)
+                })
+            }
+        }
+    })
+    let skills = new Vue({
+        el: '.skills',
+        data: {
+            posiname: ""
+        }
+    })
+</script>
+
+</html>
